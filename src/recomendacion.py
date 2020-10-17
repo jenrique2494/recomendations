@@ -99,7 +99,7 @@ def recomendations(producto_buscar,lista_productos):
     recomendaciones = []
     for element in sorted_similar_products:
         if i>0:
-            dfnew ={'id': int(get_id_from_index(element[0])), 'name': get_title_from_index(element[0]), 'description': get_home(element[0])}
+            dfnew ={'bank_id': int(get_id_from_index(element[0])), 'name': get_title_from_index(element[0]), 'description': get_home(element[0])}
             recomendaciones.append(dfnew)
         i=i+1
         if i>11:
