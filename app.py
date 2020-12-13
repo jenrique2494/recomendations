@@ -130,7 +130,7 @@ class Subcategory(db.Model, SerializerMixin):
         self.category = category
 
 
-'''class ProductImage(db.Model,SerializerMixin):
+class ProductImage(db.Model,SerializerMixin):
     __tablename__ = 'product_image'
     serialize_only = ('id', 'product_id', 'image_id', 'products', 'images')
     serialize_rules = ('-images.products.images','-products.images.products',)
@@ -145,7 +145,7 @@ class Subcategory(db.Model, SerializerMixin):
     def __init__(self,src,products,images):
         self.products = products
         self.images = images
-'''
+
 class SmartNested(Nested):
     def serialize(self, attr, obj, accessor=None):
         if attr not in obj.__dict__:
@@ -223,7 +223,7 @@ products_schema= ProductSchema(many=True)
 def home():
     return 'La pagina esta funcionando bien'
 
-
+'''
 @app.route('/products')
 def getProducts():
     return 'datos'
@@ -299,6 +299,6 @@ def postSearchProducts():
         print('')
     lista_productos= products_schema.dump(the_rock_movies)
     return  json.dumps(lista_productos)
-    
+ '''   
 if __name__=='__main__':
     app.run()
