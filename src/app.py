@@ -8,7 +8,7 @@ from filtraje import filtraje
 from flask import jsonify
 from flask import request
 #base de datos
-'''from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow, Schema, fields
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import create_engine, ForeignKey, Column, Integer, String
@@ -21,9 +21,12 @@ from marshmallow_sqlalchemy.fields import Nested
 from sqlalchemy import and_, or_
 
 app= Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root@localhost/laravel'
+#app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root@localhost/laravel'
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://u398984712_founduss:Siliconvalley1@45.93.101.52/u398984712_founduss'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-engine = create_engine('mysql+pymysql://root@localhost/laravel', echo = True)
+#engine = create_engine('mysql+pymysql://root@localhost/laravel', echo = True)
+engine = create_engine('mysql+pymysql://u398984712_founduss:Siliconvalley1@45.93.101.52/u398984712_founduss', echo = True)
 Base = declarative_base()
 Session = sessionmaker(bind = engine)
 session = Session()
@@ -32,7 +35,10 @@ db=SQLAlchemy(app)
 ma=Marshmallow(app)
 
 
-class Banks(db.Model):
+class Bank(db.Model, SerializerMixin):
+    __tablename__ = 'banks'
+    serialize_only = ('id', 'name', 'description')
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(70),unique=True)
     description = db.Column(db.Text)
@@ -129,34 +135,15 @@ class Subcategory(db.Model, SerializerMixin):
         self.category_id = category_id
         self.category = category
 
-
-'''class ProductImage(db.Model,SerializerMixin):
-    __tablename__ = 'product_image'
-    serialize_only = ('id', 'product_id', 'image_id', 'products', 'images')
-    serialize_rules = ('-images.products.images','-products.images.products',)
-
-    id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    image_id = db.Column(db.Integer, db.ForeignKey('images.id'))
-
-    product = relationship(Product, backref=backref("product_image", cascade="all, delete-orphan"))
-    image = relationship(Image, backref=backref("product_image", cascade="all, delete-orphan"))
-
-    def __init__(self,src,products,images):
-        self.products = products
-        self.images = images
-'''
-class SmartNested(Nested):
-    def serialize(self, attr, obj, accessor=None):
-        if attr not in obj.__dict__:
-            return {"id": int(getattr(obj, attr + "_id"))}
-        return super(SmartNested, self).serialize(attr, obj, accessor)
-class TaskSchema(ma.Schema):
+class Bankchema(ma.SQLAlchemySchema):
     class Meta:
-        fields = ('id', 'name','description')
+        model =Bank
+    id = ma.auto_field()
+    name = ma.auto_field()
+    description = ma.auto_field()
 
-task_schema= TaskSchema()
-tasks_schema= TaskSchema(many=True)
+bank_schema= Bankchema()
+bank_schema= Bankchema(many=True)
 
 class ImageSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -218,7 +205,10 @@ class ProductSchema(ma.SQLAlchemySchema):
 products_schema= ProductSchema()
 products_schema= ProductSchema(many=True)
 
-'''
+@app.route("/")
+def home():
+    return 'La pagina esta funcionando bien'
+
 
 @app.route('/products')
 def getProducts():
@@ -232,8 +222,8 @@ def getProduct(product_name):
 
 @app.route('/products',methods=['POST'])
 def postProducts():
-    all_products=Banks.query.all()
-    lista_productos= tasks_schema.dump(all_products)
+    all_products=Bank.query.all()
+    lista_productos= bank_schema.dump(all_products)
     producto_buscar={
         "name":request.json['name'],
         "description":request.json['description'],
@@ -297,4 +287,4 @@ def postSearchProducts():
     return  json.dumps(lista_productos)
     
 if __name__=='__main__':
-    app.run(debug=True,port=5000)
+    app.run()
