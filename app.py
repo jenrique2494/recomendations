@@ -219,6 +219,10 @@ products_schema= ProductSchema()
 products_schema= ProductSchema(many=True)
 
 '''
+@app.route("/")
+def home():
+    return 'La pagina esta funcionando bien'
+
 
 @app.route('/products')
 def getProducts():
