@@ -8,7 +8,7 @@ from filtraje import filtraje
 from flask import jsonify
 from flask import request
 #base de datos
-from flask_sqlalchemy import SQLAlchemy
+'''from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow, Schema, fields
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import create_engine, ForeignKey, Column, Integer, String
@@ -218,7 +218,7 @@ class ProductSchema(ma.SQLAlchemySchema):
 products_schema= ProductSchema()
 products_schema= ProductSchema(many=True)
 
-
+'''
 
 @app.route('/products')
 def getProducts():
