@@ -20,9 +20,9 @@ from nltk.tokenize import RegexpTokenizer
 spanish_stemmer = SnowballStemmer('spanish')
 warnings.filterwarnings('ignore')
 
-def recomendations(producto_buscar,lista_productos):
+def buscador_principal(producto_buscar,lista_productos):
     product_user_likes = producto_buscar['name']
-    description=producto_buscar['description']
+    description=''
     df1 ={'id': 0, 'name': product_user_likes, 'description': description}
     #llevando de variable el arreglo json
     filas=pd.read_json(lista_productos)
@@ -108,4 +108,3 @@ def recomendations(producto_buscar,lista_productos):
             break
     return recomendaciones
     
-
