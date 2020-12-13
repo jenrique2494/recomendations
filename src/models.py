@@ -9,8 +9,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_serializer import SerializerMixin
 from marshmallow_sqlalchemy.fields import Nested
 from app import db, ma 
+class Bank(db.Model, SerializerMixin):
+    __tablename__ = 'banks'
+    serialize_only = ('id', 'name', 'description')
 
-class Banks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(70),unique=True)
     description = db.Column(db.Text)
@@ -107,6 +109,15 @@ class Subcategory(db.Model, SerializerMixin):
         self.category_id = category_id
         self.category = category
 
+class Bankchema(ma.SQLAlchemySchema):
+    class Meta:
+        model =Bank
+    id = ma.auto_field()
+    name = ma.auto_field()
+    description = ma.auto_field()
+
+bank_schema= Bankchema()
+bank_schema= Bankchema(many=True)
 
 class ImageSchema(ma.SQLAlchemySchema):
     class Meta:

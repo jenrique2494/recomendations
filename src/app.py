@@ -216,9 +216,8 @@ def getProducts():
 
 @app.route('/products/<string:product_name>')
 def getProduct(product_name):
-    datos=buscador_principal(product_name)
-    datos_recomendacion=json.dumps(datos)
-    return datos_recomendacion
+   
+    return 'nada'
 
 @app.route('/products',methods=['POST'])
 def postProducts():
